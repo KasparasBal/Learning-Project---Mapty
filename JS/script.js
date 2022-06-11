@@ -22,6 +22,8 @@ if (navigator.geolocation)
       const coords = [latitude, longitude];
       console.log(`https://www.google.pt/maps/@${latitude},${longitude}`);
 
+      //LEAFLET
+
       const map = L.map('map').setView(coords, 13);
 
       //tile style etc.
@@ -33,10 +35,25 @@ if (navigator.geolocation)
 
       //Marker props
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-        .openPopup();
+      //event listener
+      map.on('click', mapEvent => {
+        const { lat, lng } = mapEvent.latlng;
+
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              //   className: 'cycling-popup',
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('workout')
+          .openPopup();
+      });
     },
     function () {
       alert('Could not get your position');
